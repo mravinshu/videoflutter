@@ -1,8 +1,13 @@
+// ignore_for_file: unused_field
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mugglevideo/player.dart';
+import 'package:rive/rive.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'dart:convert' as convert;
-
-import 'video.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,10 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Muggle Video',
-      theme: ThemeData.dark(),
-      home: const MyHomePage(title: 'Muggle Video'),
-    );
+        title: 'Muggle Video',
+        theme: ThemeData.dark(),
+        home: const MyHomePage(
+          title: "Muggle Video",
+        ));
   }
 }
 
@@ -31,13 +37,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isEmp = true;
   static List<String> name = [];
   static List<int> year = [];
   static List<String> link = [];
   static List<String> image = [];
+  Timer? _everySecond;
 
+  @override
   void initState() {
     super.initState();
+    _everySecond = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        setState(() {
+          isEmp = name.isEmpty;
+        });
+      },
+    );
     getDataFromSheets();
   }
 
@@ -63,18 +80,27 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Center(child: Text(widget.title)),
       ),
-      body: ElevatedButton(
-        onPressed: () {
-          getDataFromSheets();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    video(image: image, link: link, name: name)),
-          );
-        },
-        child: const Center(child: Text("Click here to Enter..")),
-      ),
+      body: isEmp
+          ? const Center(
+              child: RiveAnimation.asset("new_file.riv"),
+            )
+          : ListView.builder(
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoApp(link[index]),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    child: Text(name[index]),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
