@@ -1,13 +1,11 @@
-// ignore_for_file: unused_field
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import 'package:mugglevideo/player.dart';
 import 'package:rive/rive.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 import 'dart:convert' as convert;
+import 'info.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,15 +37,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isEmp = true;
   static List<String> name = [];
-  static List<int> year = [];
-  static List<String> link = [];
-  static List<String> image = [];
-  Timer? _everySecond;
+  static List<dynamic> link = [];
+  static Map<int, String> season = {};
 
   @override
   void initState() {
     super.initState();
-    _everySecond = Timer.periodic(
+    Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
         setState(() {
@@ -59,44 +55,98 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static getDataFromSheets() async {
-    var raw = await http.get(
-      Uri.parse(
-        "https://script.google.com/macros/s/AKfycbwysvzlpbYBMVKaFFOrbGTvLC2BI0Uzg7w1YERfjGaL3n7xZKNpP9cK0kDdGncShwoImw/exec",
-      ),
+    var raw = await rootBundle.loadString('assets/try.json');
+    var jsonData = convert.jsonDecode(raw) as Map<String, dynamic>;
+    int i = 0;
+    jsonData.forEach(
+      (key, value) {
+        name.add(key);
+        if (value['Season'] != null) {
+          season[i] = "" + value['Season'].toString();
+          // for (var i = 0; i < 1; i++) {
+          //   for (var j = 0; j < value[i.toString()]['episode']; j++) {
+          //     link.add(value[(i + 1).toString()][(j + 1).toString()]);
+          //   }
+          // }
+        } else {
+          season[i] = "";
+        }
+      },
     );
+  }
 
-    var jsonData = convert.jsonDecode(raw.body);
-    jsonData.forEach((element) {
-      name.add(element['name']);
-      year.add(element['year']);
-      link.add(element['link']);
-      image.add(element['image']);
-    });
+  String imageMaker(String name, String image) {
+    String newImage = image;
+    String nameImage = name;
+    newImage = newImage.replaceFirst(
+        'https://github.com/', 'https://raw.githubusercontent.com/');
+    newImage = newImage.replaceFirst('blob/main/Images/', 'main/Images/');
+    newImage = newImage.replaceFirst('blob/web/Images/', 'web/Images/');
+    if (newImage != image) {
+      newImage = newImage + name + '.jpg';
+    }
+    if (nameImage.contains(' ')) {
+      nameImage = name.replaceAll(' ', '%20');
+    }
+    if (newImage == '') {
+      newImage =
+          'https://raw.githubusercontent.com/mravinshu/mugglevideo/main/Images/' +
+              nameImage +
+              '.jpg';
+    }
+    return newImage;
   }
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData device = MediaQuery.of(context);
+    int numOfItem = (device.size.width.toInt()) ~/ 200;
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Center(child: Text(widget.title)),
       ),
       body: isEmp
           ? const Center(
-              child: RiveAnimation.asset("new_file.riv"),
+              child: RiveAnimation.asset(
+                'assets/new_file.riv',
+              ),
             )
-          : ListView.builder(
+          : GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: numOfItem,
+                childAspectRatio: 1,
+              ),
+              itemCount: name.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => VideoApp(link[index]),
+                        builder: (context) => player(
+                          link: link[index],
+                        ),
                       ),
                     );
                   },
                   child: Card(
-                    child: Text(name[index]),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                          image: NetworkImage(imageMaker(name[index], "")),
+                          height: 150,
+                          width: 150,
+                        ),
+                        Text(
+                          name[index],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
