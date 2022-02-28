@@ -96,51 +96,55 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Center(child: Text(widget.title)),
       ),
-      body: isEmp
-          ? const Center(
-              child: RiveAnimation.asset(
-                'assets/new_file.riv',
-              ),
-            )
-          : GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: numOfItem,
-                childAspectRatio: 1,
-              ),
-              itemCount: name.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => info(
-                          episode: link[index],
-                        ),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image(
-                          image: NetworkImage(imageMaker(name[index], "")),
-                          height: 150,
-                          width: 150,
-                        ),
-                        Text(
-                          name[index],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: isEmp
+            ? const Center(
+                child: RiveAnimation.asset(
+                  'assets/new_file.riv',
+                ),
+              )
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: numOfItem,
+                  childAspectRatio: 1,
+                ),
+                itemCount: name.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => info(
+                            episode: link[index],
+                            image: imageMaker(name[index], ""),
+                            name: name[index],
                           ),
                         ),
-                      ],
+                      );
+                    },
+                    child: Card(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image(
+                            image: NetworkImage(imageMaker(name[index], "")),
+                            height: 150,
+                            width: 150,
+                          ),
+                          Text(
+                            name[index],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

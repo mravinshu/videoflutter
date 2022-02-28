@@ -1,11 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:mugglevideo/player.dart';
 
 // ignore: camel_case_types
 class info extends StatefulWidget {
   final dynamic episode;
-  const info({Key? key, required this.episode}) : super(key: key);
+  final String image;
+  final String name;
+  const info(
+      {Key? key,
+      required this.episode,
+      required this.image,
+      required this.name})
+      : super(key: key);
 
   @override
   _infoState createState() => _infoState();
@@ -27,7 +33,6 @@ class _infoState extends State<info> {
     } else {
       movie = true;
     }
-    print(noOfSeason);
   }
 
   @override
@@ -35,7 +40,24 @@ class _infoState extends State<info> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: movie
-          ? Text("Under Development")
+          ? GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => player(link: widget.episode['Movie']),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  Image(
+                    image: NetworkImage(widget.image),
+                  ),
+                  Text(widget.name),
+                ],
+              ),
+            )
           : SizedBox(
               height: 40,
               child: ListView.builder(
