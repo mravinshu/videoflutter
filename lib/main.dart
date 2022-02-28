@@ -38,13 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isEmp = true;
   static List<String> name = [];
   static List<dynamic> link = [];
-  static Map<int, String> season = {};
 
   @override
   void initState() {
     super.initState();
     Timer.periodic(
-      const Duration(seconds: 1),
+      const Duration(seconds: 4),
       (timer) {
         setState(() {
           isEmp = name.isEmpty;
@@ -61,16 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     jsonData.forEach(
       (key, value) {
         name.add(key);
-        if (value['Season'] != null) {
-          season[i] = "" + value['Season'].toString();
-          // for (var i = 0; i < 1; i++) {
-          //   for (var j = 0; j < value[i.toString()]['episode']; j++) {
-          //     link.add(value[(i + 1).toString()][(j + 1).toString()]);
-          //   }
-          // }
-        } else {
-          season[i] = "";
-        }
+        link.add(value);
       },
     );
   }
@@ -124,8 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => player(
-                          link: link[index],
+                        builder: (context) => info(
+                          episode: link[index],
                         ),
                       ),
                     );
