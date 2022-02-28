@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     Timer.periodic(
-      const Duration(seconds: 4),
+      const Duration(seconds: 1),
       (timer) {
         setState(() {
           isEmp = name.isEmpty;
