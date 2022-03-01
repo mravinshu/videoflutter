@@ -67,7 +67,8 @@ class _infoState extends State<info> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        print(index);
+                        print(
+                            widget.episode[(index + 1).toString()]['episode']);
                       },
                       child: Card(
                           child: Padding(

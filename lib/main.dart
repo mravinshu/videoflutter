@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mugglevideo/player.dart';
 import 'package:rive/rive.dart';
 import 'dart:convert' as convert;
 import 'info.dart';
@@ -56,7 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
   static getDataFromSheets() async {
     var raw = await rootBundle.loadString('assets/try.json');
     var jsonData = convert.jsonDecode(raw) as Map<String, dynamic>;
-    int i = 0;
     jsonData.forEach(
       (key, value) {
         name.add(key);

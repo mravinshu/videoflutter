@@ -69,10 +69,10 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:video_player/video_player.dart';
 
+// ignore: camel_case_types
 class player extends StatefulWidget {
   final String link;
   const player({Key? key, required this.link}) : super(key: key);
@@ -81,6 +81,7 @@ class player extends StatefulWidget {
   _playerState createState() => _playerState();
 }
 
+// ignore: camel_case_types
 class _playerState extends State<player> {
   String linkMaker() {
     String newLink = widget.link;
@@ -109,8 +110,6 @@ class _playerState extends State<player> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FlickVideoPlayer(flickManager: flickManager),
-    );
+    return FlickVideoPlayer(flickManager: flickManager);
   }
 }
