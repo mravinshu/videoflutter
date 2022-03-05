@@ -40,22 +40,25 @@ class _infoState extends State<info> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: movie
-          ? GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => player(link: widget.episode['Movie']),
-                  ),
-                );
-              },
-              child: Column(
-                children: [
-                  Image(
-                    image: NetworkImage(widget.image),
-                  ),
-                  Text(widget.name),
-                ],
+          ? SafeArea(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          player(link: widget.episode['Movie']),
+                    ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Image(
+                      image: NetworkImage(widget.image),
+                    ),
+                    Text(widget.name),
+                  ],
+                ),
               ),
             )
           : SizedBox(

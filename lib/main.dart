@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mugglevideo/Search.dart';
 import 'package:rive/rive.dart';
 import 'dart:convert' as convert;
 import 'info.dart';
@@ -88,10 +89,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData device = MediaQuery.of(context);
-    int numOfItem = (device.size.width.toInt()) ~/ 200;
+    int numOfItem = (device.size.width.toInt()) ~/ 100;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        actions: [
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const searchUi()),
+                );
+              },
+              child: const Icon(Icons.search)),
+        ],
         title: Center(child: Text(widget.title)),
       ),
       body: SafeArea(
